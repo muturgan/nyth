@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "(rm -rf dist || npx rimraf dist) && tsc -p tsconfig.json",
+    "dev": "nodemon",
     "prepare": "husky install"
   },
   "repository": {
