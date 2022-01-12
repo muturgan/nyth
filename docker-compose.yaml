@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  db:
+    env_file:
+      - .env
+    container_name: short_db
+    image: mysql:5.7.36
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      TZ: ${DB_TIME}
+    ports:
+      - ${DB_PORT}:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
