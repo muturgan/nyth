@@ -1,6 +1,6 @@
 import http = require('http');
 import qs = require('querystring');
-import { IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest } from '../typings';
+import { IRpcAdapter, IRpcExecutor, IRpcRequest } from '../typings';
 
 
 const GET = 'GET';
@@ -13,9 +13,17 @@ export interface IHttpAdapterOptions {
    readonly port: number;
 }
 
+export interface IHttpAdapter extends IRpcAdapter {
+   adjust<T>(constructor: new (arg: { server: http.Server }) => T): T;
+   close(): Promise<void>;
+   readonly port: number;
+}
+
+export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHttpAdapter;
 
 
-export const HttpAdapter: IRpcAdapterConstructor<IHttpAdapterOptions> = class HttpAdapter implements IRpcAdapter
+
+export const HttpAdapter: IHttpAdapterConstructor  = class HttpAdapter implements IRpcAdapter, IHttpAdapter
 {
    private readonly _server: http.Server;
    private readonly _options: IHttpAdapterOptions;
@@ -118,5 +126,13 @@ export const HttpAdapter: IRpcAdapterConstructor<IHttpAdapterOptions> = class Ht
             resolve();
          });
       });
+   }
+
+   public adjust<T>(constructor: new (arg: { server: http.Server }) => T): T {
+      return new constructor({server: this._server});
+   }
+
+   public get port(): number {
+      return this._options.port;
    }
 };
