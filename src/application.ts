@@ -1,6 +1,6 @@
 import { Factory } from './application.factory';
 import { lengthHandler } from './handler';
-import { HttpAdapter } from './http.adapter';
+import { HttpAdapter } from './adapters/http.adapter';
 import { IRouting } from './typings';
 
 const httpAdapter = new HttpAdapter({port: 3333});

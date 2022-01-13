@@ -1,6 +1,6 @@
 import http = require('http');
 import qs = require('querystring');
-import { IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest } from './typings';
+import { IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest } from '../typings';
 
 
 const GET = 'GET';
@@ -19,7 +19,7 @@ export const HttpAdapter: IRpcAdapterConstructor<IHttpAdapterOptions> = class Ht
 {
    private readonly _server: http.Server;
    private readonly _options: IHttpAdapterOptions;
-   private readonly _executor: IRpcExecutor | null = null;
+   private _executor: IRpcExecutor | null = null;
 
    constructor(options: IHttpAdapterOptions)
    {
@@ -92,8 +92,8 @@ export const HttpAdapter: IRpcAdapterConstructor<IHttpAdapterOptions> = class Ht
    }
 
 
-   public async start(executor: IRpcExecutor): Promise<void> {
-      // @ts-ignore
+   public async start(executor: IRpcExecutor): Promise<void>
+   {
       this._executor = executor;
 
       return new Promise<void>((resolve, reject) => {
