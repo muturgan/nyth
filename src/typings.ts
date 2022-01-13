@@ -1,28 +1,26 @@
-export type IUnverifiedRpcRequest = Record<string, unknown>;
-
-export interface IRpcRequestWithMethod extends IUnverifiedRpcRequest {
+export interface IRpcRequest<T = undefined> {
    readonly method: string;
-}
-
-export interface IRpcRequest<T = undefined> extends IRpcRequestWithMethod {
    readonly payload: T;
+   readonly requestId?: string | number | null;
+   readonly version?: number | null;
+   readonly timestamp?: number | null;
 }
 
 export interface IRpcResult<Payload = unknown> {
    readonly payload: Payload;
 }
 
-export type IRpcListener = (rpcCall: IRpcRequest) => Promise<IRpcResult>;
+export type IRpcExecutor = (rpcCall: IRpcRequest) => Promise<IRpcResult>;
 
 export interface IRpcAdapter {
-   start(handler: IRpcListener): void | Promise<void>;
+   start(executor: IRpcExecutor): void | Promise<void>;
    close(): void | Promise<void>;
 }
 
 export type IRpcAdapterConstructor<O = unknown> = new (options: O) => IRpcAdapter;
 
 export interface IRpcMethodHandler<Result = unknown, CallData = undefined> {
-   validate(rpcCall: IUnverifiedRpcRequest): rpcCall is IRpcRequest<CallData>;
+   validate(rpcCallPayload: unknown): rpcCallPayload is CallData;
    run(rpcCall: IRpcRequest<CallData>): Result | Promise<Result>;
 }
 

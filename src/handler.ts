@@ -1,16 +1,10 @@
-import { IRpcRequest, IRpcMethodHandler } from './typings';
+import { IRpcMethodHandler } from './typings';
 
 export const lengthHandler: IRpcMethodHandler<number, string> = {
-   validate(rpcCall): rpcCall is IRpcRequest<string> {
-      return typeof rpcCall?.payload === 'string';
+   validate(rpcCallPayload): rpcCallPayload is string {
+      return typeof rpcCallPayload === 'string';
    },
    run(rpcCall) {
-      const isValid = this.validate(rpcCall);
-      if (isValid) {
-         return rpcCall.payload.length;
-      }
-      else {
-         return 0;
-      }
+      return rpcCall.payload.length;
    },
 };

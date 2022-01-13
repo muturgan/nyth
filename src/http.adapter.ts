@@ -1,6 +1,6 @@
 import http = require('http');
 import qs = require('querystring');
-import { IRpcAdapter, IRpcAdapterConstructor, IRpcListener } from './typings';
+import { IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest } from './typings';
 
 
 const GET = 'GET';
@@ -19,7 +19,7 @@ export const HttpAdapter: IRpcAdapterConstructor<IHttpAdapterOptions> = class Ht
 {
    private readonly _server: http.Server;
    private readonly _options: IHttpAdapterOptions;
-   private readonly _handler: IRpcListener | null = null;
+   private readonly _executor: IRpcExecutor | null = null;
 
    constructor(options: IHttpAdapterOptions)
    {
@@ -27,7 +27,7 @@ export const HttpAdapter: IRpcAdapterConstructor<IHttpAdapterOptions> = class Ht
 
       this._server = http.createServer(async (req, res): Promise<void> =>
       {
-         if (this._handler === null) {
+         if (this._executor === null) {
             res.socket?.destroy();
             return;
          }
@@ -45,12 +45,12 @@ export const HttpAdapter: IRpcAdapterConstructor<IHttpAdapterOptions> = class Ht
          }
 
 
-         let rpcReq: Record<string, unknown>;
+         let rpcReq: IRpcRequest;
 
          switch (req.method)
          {
             case GET:
-               rpcReq = {...qs.parse(searchStr)};
+               rpcReq = {...qs.parse(searchStr)} as any;
                break;
 
 
@@ -83,7 +83,7 @@ export const HttpAdapter: IRpcAdapterConstructor<IHttpAdapterOptions> = class Ht
                return;
          }
 
-         const result = await this._handler(rpcReq as any);
+         const result = await this._executor(rpcReq);
 
          res.end(JSON.stringify(result));
          return;
@@ -92,9 +92,9 @@ export const HttpAdapter: IRpcAdapterConstructor<IHttpAdapterOptions> = class Ht
    }
 
 
-   public async start(handler: IRpcListener): Promise<void> {
+   public async start(executor: IRpcExecutor): Promise<void> {
       // @ts-ignore
-      this._handler = handler;
+      this._executor = executor;
 
       return new Promise<void>((resolve, reject) => {
          try {
