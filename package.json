@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
-  "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "main": "dist/application.js",
   "engines": {
     "node": ">=14.18.3"
