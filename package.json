@@ -11,9 +11,6 @@
   "scripts": {
     "build": "npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/ws-adapter"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "workspaces": [
     "./packages/*"
   ],
