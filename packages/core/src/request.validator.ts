@@ -1,5 +1,5 @@
 import Validator, { ValidationSchema, SyncCheckFunction } from 'fastest-validator';
-import { IRpcRequest } from './typings';
+import { IRpcRequest } from '@nyth/common';
 
 const V = new Validator();
 

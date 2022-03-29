@@ -1,6 +1,5 @@
-import { IHttpAdapter } from './http.adapter';
 import { WebSocketServer } from 'ws';
-import { IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest } from '../typings';
+import { IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest, IHttpAdapter } from '@nyth/common';
 
 
 export type IWebSocketAdapterOptions = {

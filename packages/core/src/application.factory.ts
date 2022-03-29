@@ -1,4 +1,4 @@
-import { IApplication, IApplicationFactory, IRpcExecutor, IRpcResult, IRpcRequest } from './typings';
+import { IApplication, IApplicationFactory, IRpcExecutor, IRpcResult, IRpcRequest } from '@nyth/common';
 import { validateRequest } from './request.validator';
 import { ValidationError } from 'fastest-validator';
 

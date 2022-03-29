@@ -1,6 +1,6 @@
 import http = require('http');
 import qs = require('querystring');
-import { IRpcAdapter, IRpcExecutor, IRpcRequest } from '../typings';
+import { IRpcAdapter, IRpcExecutor, IRpcRequest, IHttpAdapter } from '@nyth/common';
 
 
 const GET = 'GET';
@@ -10,12 +10,6 @@ const API = '/api';
 
 
 export interface IHttpAdapterOptions {
-   readonly port: number;
-}
-
-export interface IHttpAdapter extends IRpcAdapter {
-   adjust<T>(constructor: new (arg: { server: http.Server }) => T): T;
-   close(): Promise<void>;
    readonly port: number;
 }
 
