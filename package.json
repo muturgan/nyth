@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/ws-adapter",
+    "audit": "npm audit | grep 'found' | grep -E 'moderate|high|critical' && exit 1 || exit 0",
     "lint_on_commit": "tslint",
     "lint_staged": "lint-staged",
     "prepare": "husky install"
