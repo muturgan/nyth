@@ -9,12 +9,17 @@
     "npm": ">=8.5.0"
   },
   "scripts": {
-    "build": "npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/ws-adapter"
+    "build": "npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/ws-adapter",
+    "lint_on_commit": "tslint",
+    "lint_staged": "lint-staged",
+    "prepare": "husky install"
   },
   "workspaces": [
     "./packages/*"
   ],
   "devDependencies": {
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.7",
     "tslint": "^6.1.3"
   }
 }
