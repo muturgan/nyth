@@ -1,5 +1,4 @@
 import http = require('http');
-import qs = require('querystring');
 import { IRpcAdapter, IRpcExecutor, IRpcRequest, IHttpAdapter } from '@nyth/common';
 
 
@@ -17,7 +16,7 @@ export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHtt
 
 
 
-export const HttpAdapter: IHttpAdapterConstructor  = class HttpAdapter implements IRpcAdapter, IHttpAdapter
+export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter implements IRpcAdapter, IHttpAdapter // tslint:disable-line:no-shadowed-variable
 {
    private readonly _server: http.Server;
    private readonly _options: IHttpAdapterOptions;
@@ -52,7 +51,7 @@ export const HttpAdapter: IHttpAdapterConstructor  = class HttpAdapter implement
          switch (req.method)
          {
             case GET:
-               rpcReq = {...qs.parse(searchStr)} as any;
+               rpcReq = Object.fromEntries(new URLSearchParams(searchStr)) as any;
                break;
 
 

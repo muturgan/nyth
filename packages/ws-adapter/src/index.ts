@@ -9,7 +9,7 @@ export type IWebSocketAdapterOptions = {
 };
 
 
-export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> = class WebSocketAdapter implements IRpcAdapter
+export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> = class WebSocketAdapter implements IRpcAdapter // tslint:disable-line:no-shadowed-variable
 {
    private _server: WebSocketServer | null = null;
    private _httpAdapter: IHttpAdapter | null = null;
