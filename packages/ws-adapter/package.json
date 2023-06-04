@@ -1,6 +1,6 @@
 {
   "name": "@nyth/ws-adapter",
-  "version": "0.1.3",
+  "version": "0.2.1",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
@@ -35,8 +35,8 @@
     "ws": "^8.13.0"
   },
   "peerDependencies": {
-    "@nyth/common": "^0.1.3",
-    "@nyth/http-adapter": "^0.1.3"
+    "@nyth/common": "^0.2.1",
+    "@nyth/http-adapter": "^0.2.1"
   },
   "peerDependenciesMeta": {
     "@nyth/http-adapter": {

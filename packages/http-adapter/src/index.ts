@@ -1,5 +1,5 @@
 import http = require('http');
-import { IRpcAdapter, IRpcExecutor, IRpcRequest, IHttpAdapter } from '@nyth/common';
+import { BaseAdapter, ISerializer, IRpcAdapter, IRpcExecutor, IRpcRequest, IHttpAdapter } from '@nyth/common';
 
 
 const GET = 'GET';
@@ -16,14 +16,16 @@ export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHtt
 
 
 
-export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter implements IRpcAdapter, IHttpAdapter // tslint:disable-line:no-shadowed-variable
+export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends BaseAdapter implements IRpcAdapter, IHttpAdapter // tslint:disable-line:no-shadowed-variable
 {
    readonly #server: http.Server;
    readonly #options: IHttpAdapterOptions;
    #executor: IRpcExecutor | null = null;
 
-   constructor(options: IHttpAdapterOptions)
+   constructor(options: IHttpAdapterOptions, serializer?: ISerializer)
    {
+      super(serializer);
+
       this.#options = options;
 
       this.#server = http.createServer(async (req, res): Promise<void> =>
@@ -71,7 +73,7 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter implements
 
                const body = Buffer.concat(chunks).toString();
                try {
-                  rpcReq = JSON.parse(body);
+                  rpcReq = this.serializer.deserialize(body);
                } catch {
                   res.writeHead(400);
                   res.end('Incorrect request body. It should be a valid json-serialized object');
@@ -86,7 +88,16 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter implements
 
          const result = await this.#executor(rpcReq);
 
-         res.end(JSON.stringify(result));
+         let serializedResult: string;
+         try {
+            serializedResult = this.serializer.serialize(result);
+         } catch {
+            res.writeHead(500);
+            res.end('Error on response serialisation');
+            return;
+         }
+
+         res.end(serializedResult);
          return;
 
       });

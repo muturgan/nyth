@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws';
-import { IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest, IHttpAdapter } from '@nyth/common';
+import { BaseAdapter, ISerializer, IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest, IHttpAdapter } from '@nyth/common';
 
 
 export type IWebSocketAdapterOptions = {
@@ -9,13 +9,14 @@ export type IWebSocketAdapterOptions = {
 };
 
 
-export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> = class WebSocketAdapter implements IRpcAdapter // tslint:disable-line:no-shadowed-variable
+export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> = class WebSocketAdapter extends BaseAdapter implements IRpcAdapter // tslint:disable-line:no-shadowed-variable
 {
    #server: WebSocketServer | null = null;
    #httpAdapter: IHttpAdapter | null = null;
    readonly #options: IWebSocketAdapterOptions;
 
-   constructor(options: IWebSocketAdapterOptions) {
+   constructor(options: IWebSocketAdapterOptions, serializer?: ISerializer) {
+      super(serializer);
       this.#options = options;
    }
 
@@ -36,14 +37,21 @@ export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> 
          ws.on('message', async (rawData): Promise<void> => {
             let rpcReq: IRpcRequest;
             try {
-               rpcReq = JSON.parse(rawData.toString());
+               rpcReq = this.serializer.deserialize(rawData.toString());
             } catch {
                ws.send('Error...');
                return;
             }
 
             const result = await executor(rpcReq);
-            ws.send(JSON.stringify(result));
+            let serializedResult: string;
+            try {
+               serializedResult = this.serializer.serialize(result);
+            } catch {
+               ws.send('Error on response serialisation...');
+               return;
+            }
+            ws.send(serializedResult);
          });
       });
    }

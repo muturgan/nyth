@@ -1,3 +1,6 @@
+import { BaseAdapter } from './base-adapter';
+import { ISerializer } from './serializer';
+
 export interface IRpcRequest<T = undefined> {
    readonly method: string;
    readonly payload: T;
@@ -12,12 +15,12 @@ export interface IRpcResult<Payload = unknown> {
 
 export type IRpcExecutor = (rpcCall: IRpcRequest) => Promise<IRpcResult>;
 
-export interface IRpcAdapter {
+export interface IRpcAdapter extends BaseAdapter {
    start(executor: IRpcExecutor): void | Promise<void>;
    close(): void | Promise<void>;
 }
 
-export type IRpcAdapterConstructor<O = unknown> = new (options: O) => IRpcAdapter;
+export type IRpcAdapterConstructor<O = unknown> = new (options: O, serializer?: ISerializer) => IRpcAdapter;
 
 export interface IRpcMethodHandler<Result = unknown, CallData = undefined> {
    validate(rpcCallPayload: unknown): rpcCallPayload is CallData;
