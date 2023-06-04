@@ -1,1 +1,1 @@
-export { Factory } from './application.factory'
+export { Factory } from './application.factory';
