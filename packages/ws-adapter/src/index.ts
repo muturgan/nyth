@@ -11,28 +11,28 @@ export type IWebSocketAdapterOptions = {
 
 export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> = class WebSocketAdapter implements IRpcAdapter // tslint:disable-line:no-shadowed-variable
 {
-   private _server: WebSocketServer | null = null;
-   private _httpAdapter: IHttpAdapter | null = null;
-   private readonly _options: IWebSocketAdapterOptions;
+   #server: WebSocketServer | null = null;
+   #httpAdapter: IHttpAdapter | null = null;
+   readonly #options: IWebSocketAdapterOptions;
 
    constructor(options: IWebSocketAdapterOptions) {
-      this._options = options;
+      this.#options = options;
    }
 
    public async start(executor: IRpcExecutor): Promise<void>
    {
-      if ('httpAdapter' in this._options) {
-         this._httpAdapter = this._options.httpAdapter;
-         await this._httpAdapter.start(executor);
-         this._server = this._httpAdapter.adjust(WebSocketServer);
-         console.info(`WebSocket server running at http://127.0.0.1:${this._httpAdapter.port}`);
+      if ('httpAdapter' in this.#options) {
+         this.#httpAdapter = this.#options.httpAdapter;
+         await this.#httpAdapter.start(executor);
+         this.#server = this.#httpAdapter.adjust(WebSocketServer);
+         console.info(`WebSocket server running at http://127.0.0.1:${this.#httpAdapter.port}`);
       }
       else {
-         this._server = new WebSocketServer({ port: this._options.port });
-         console.info(`WebSocket server running at http://127.0.0.1:${this._options.port}`);
+         this.#server = new WebSocketServer({ port: this.#options.port });
+         console.info(`WebSocket server running at http://127.0.0.1:${this.#options.port}`);
       }
 
-      this._server.on('connection', (ws) => {
+      this.#server.on('connection', (ws) => {
          ws.on('message', async (rawData): Promise<void> => {
             let rpcReq: IRpcRequest;
             try {
@@ -50,18 +50,18 @@ export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> 
 
    public async close(): Promise<void> {
       await Promise.all([
-         this._closeWs(),
-         this._closeHttp(),
+         this.#closeWs(),
+         this.#closeHttp(),
       ]);
    }
 
-   private _closeWs(): Promise<void> {
+   #closeWs(): Promise<void> {
       return new Promise<void>((resolve, reject): void => {
-         if (this._server === null) {
+         if (this.#server === null) {
             return resolve();
          }
 
-         this._server.close((err) => {
+         this.#server.close((err) => {
             if (err) {
                return reject(err);
             }
@@ -70,9 +70,9 @@ export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> 
       });
    }
 
-   private _closeHttp(): Promise<void> {
-      return this._httpAdapter === null
+   #closeHttp(): Promise<void> {
+      return this.#httpAdapter === null
          ? Promise.resolve()
-         : this._httpAdapter.close();
+         : this.#httpAdapter.close();
    }
 };

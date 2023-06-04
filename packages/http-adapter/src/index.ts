@@ -18,17 +18,17 @@ export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHtt
 
 export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter implements IRpcAdapter, IHttpAdapter // tslint:disable-line:no-shadowed-variable
 {
-   private readonly _server: http.Server;
-   private readonly _options: IHttpAdapterOptions;
-   private _executor: IRpcExecutor | null = null;
+   readonly #server: http.Server;
+   readonly #options: IHttpAdapterOptions;
+   #executor: IRpcExecutor | null = null;
 
    constructor(options: IHttpAdapterOptions)
    {
-      this._options = options;
+      this.#options = options;
 
-      this._server = http.createServer(async (req, res): Promise<void> =>
+      this.#server = http.createServer(async (req, res): Promise<void> =>
       {
-         if (this._executor === null) {
+         if (this.#executor === null) {
             res.socket?.destroy();
             return;
          }
@@ -84,7 +84,7 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter implements
                return;
          }
 
-         const result = await this._executor(rpcReq);
+         const result = await this.#executor(rpcReq);
 
          res.end(JSON.stringify(result));
          return;
@@ -95,12 +95,12 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter implements
 
    public async start(executor: IRpcExecutor): Promise<void>
    {
-      this._executor = executor;
+      this.#executor = executor;
 
       return new Promise<void>((resolve, reject) => {
          try {
-            this._server.listen(this._options.port, () => {
-               console.info(`Server running at http://127.0.0.1:${this._options.port}/`);
+            this.#server.listen(this.#options.port, () => {
+               console.info(`Server running at http://127.0.0.1:${this.#options.port}/`);
                resolve();
             });
          } catch (err) {
@@ -112,7 +112,7 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter implements
 
    public async close(): Promise<void> {
       return new Promise<void>((resolve, reject): void => {
-         this._server.close((err) => {
+         this.#server.close((err) => {
             if (err) {
                return reject(err);
             }
@@ -122,10 +122,10 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter implements
    }
 
    public adjust<T>(constructor: new (arg: { server: http.Server }) => T): T {
-      return new constructor({server: this._server});
+      return new constructor({server: this.#server});
    }
 
    public get port(): number {
-      return this._options.port;
+      return this.#options.port;
    }
 };
