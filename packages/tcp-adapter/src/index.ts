@@ -1,6 +1,7 @@
 import net = require('net');
+import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
-import { BaseAdapter, IRpcAdapter, IRpcExecutor, IRpcRequest, IRpcAdapterConstructor, SystemErrorResult } from '@nyth/common';
+import { IRpcAdapter, IRpcExecutor, IRpcRequest, IRpcAdapterConstructor, SystemErrorResult } from '@nyth/common';
 
 
 export interface ITcpAdapterOptions {

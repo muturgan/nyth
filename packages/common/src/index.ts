@@ -1,5 +1,3 @@
-export { BaseAdapter } from './base-adapter';
-
 export {
    INTERNAL_ERROR_MESSAGE,
    PERMISSIONS_DENIED_MESSAGE,

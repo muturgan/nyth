@@ -1,5 +1,4 @@
 export {
-    BaseAdapter,
     INTERNAL_ERROR_MESSAGE,
     PERMISSIONS_DENIED_MESSAGE,
     AppError,

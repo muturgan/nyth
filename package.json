@@ -9,7 +9,7 @@
     "npm": ">=8.5.0"
   },
   "scripts": {
-    "build": "npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/serializer && npm run build -w @nyth/tcp-adapter && npm run build -w @nyth/ws-adapter",
+    "build": "npm run build -w @nyth/base-adapter && npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/serializer && npm run build -w @nyth/tcp-adapter && npm run build -w @nyth/ws-adapter",
     "audit": "npm audit | grep 'found' | grep -E 'moderate|high|critical' && exit 1 || exit 0",
     "lint_on_commit": "tslint",
     "lint_staged": "lint-staged",

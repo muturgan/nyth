@@ -1,5 +1,5 @@
+import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
-import { BaseAdapter } from './base-adapter';
 import { RpcResult } from './responses';
 
 export interface IRpcRequest<Payload = unknown> {
