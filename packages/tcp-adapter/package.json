@@ -1,5 +1,5 @@
 {
-  "name": "@nyth/ws-adapter",
+  "name": "@nyth/tcp-adapter",
   "version": "0.4.0",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
@@ -31,24 +31,11 @@
     "url": "https://github.com/muturgan/nyth/issues"
   },
   "homepage": "https://github.com/muturgan/nyth#readme",
-  "dependencies": {
-    "ws": "^8.13.0"
-  },
   "peerDependencies": {
-    "@nyth/common": "^0.4.0",
-    "@nyth/http-adapter": "^0.4.0"
-  },
-  "peerDependenciesMeta": {
-    "@nyth/http-adapter": {
-      "optional": true
-    },
-    "@types/ws": {
-      "optional": true
-    }
+    "@nyth/common": "^0.4.0"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",
-    "@types/ws": "^8.5.4",
     "typescript": "^5.1.3"
   },
   "publishConfig": {

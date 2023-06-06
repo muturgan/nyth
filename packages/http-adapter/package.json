@@ -1,6 +1,6 @@
 {
   "name": "@nyth/http-adapter",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/muturgan/nyth#readme",
   "peerDependencies": {
-    "@nyth/common": "^0.3.5"
+    "@nyth/common": "^0.4.0"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",

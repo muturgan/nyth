@@ -1,6 +1,6 @@
 {
   "name": "nyth",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "npm": ">=8.5.0"
   },
   "scripts": {
-    "build": "npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/ws-adapter",
+    "build": "npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/tcp-adapter && npm run build -w @nyth/ws-adapter",
     "audit": "npm audit | grep 'found' | grep -E 'moderate|high|critical' && exit 1 || exit 0",
     "lint_on_commit": "tslint",
     "lint_staged": "lint-staged",
