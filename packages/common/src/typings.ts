@@ -1,19 +1,17 @@
 import { BaseAdapter } from './base-adapter';
+import { RpcResult } from './responses';
 import { ISerializer } from './serializer';
 
-export interface IRpcRequest<T = undefined> {
+export interface IRpcRequest<Payload = unknown> {
    readonly method: string;
-   readonly payload: T;
+   readonly payload: Payload;
+   readonly correlationId?: string | number | null;
    readonly requestId?: string | number | null;
    readonly version?: number | null;
    readonly timestamp?: number | null;
 }
 
-export interface IRpcResult<Payload = unknown> {
-   readonly payload: Payload;
-}
-
-export type IRpcExecutor = (rpcCall: IRpcRequest) => Promise<IRpcResult>;
+export type IRpcExecutor = (rpcCall: IRpcRequest) => Promise<RpcResult>;
 
 export interface IRpcAdapter extends BaseAdapter {
    start(executor: IRpcExecutor): void | Promise<void>;
@@ -22,12 +20,22 @@ export interface IRpcAdapter extends BaseAdapter {
 
 export type IRpcAdapterConstructor<O = unknown> = new (options: O, serializer?: ISerializer) => IRpcAdapter;
 
-export interface IRpcMethodHandler<Result = unknown, CallData = undefined> {
-   validate(rpcCallPayload: unknown): rpcCallPayload is CallData;
+export interface IHandlerValidationSuccess {
+   readonly isValidCallData: true;
+   readonly validationErrorMessage?: null;
+}
+export interface IHandlerValidationFail {
+   readonly isValidCallData: false;
+   readonly validationErrorMessage: string;
+}
+export type THandlerValidationResult = IHandlerValidationSuccess | IHandlerValidationFail;
+
+export interface IRpcMethodHandler<Result = unknown, CallData = unknown> {
+   validate(rpcCallPayload: CallData): THandlerValidationResult;
    run(rpcCall: IRpcRequest<CallData>): Result | Promise<Result>;
 }
 
-export type IExecutor<Result = unknown, CallData = undefined> = (handler: IRpcMethodHandler<Result, CallData>) => Promise<Result>;
+export type IExecutor<Result = unknown, CallData = unknown> = (handler: IRpcMethodHandler<Result, CallData>) => Promise<Result>;
 
 export interface IApplication {
    start(): Promise<void>;

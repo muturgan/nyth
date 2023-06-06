@@ -1,8 +1,9 @@
-import { IRpcRequest, IRpcResult } from './typings';
+import { RpcResult } from './responses';
+import { IRpcRequest } from './typings';
 
 export interface ISerializer {
    deserialize(req: string): IRpcRequest;
-   serialize(res: IRpcResult): string;
+   serialize(res: RpcResult): string;
 }
 
 export const defaultSerializer: ISerializer = {
