@@ -4,7 +4,7 @@ import { INTERNAL_ERROR_MESSAGE, PERMISSIONS_DENIED_MESSAGE, ScenarioError, Syst
 
 declare const SECRET_SYMBOL: unique symbol;
 
-export const enum EScenarioStatus {
+export enum EScenarioStatus {
    SCENARIO_SUCCESS = 1,
    PERMISSIONS_DENIED,
    SCENARIO_FAIL,

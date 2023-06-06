@@ -9,6 +9,7 @@ export {
     HandlerValidationSuccess,
     HANDLER_VALIDATION_SUCCESS,
     HandlerValidationFail,
+    EScenarioStatus,
     RpcResult,
     ScenarioSuccessResult,
     PermissionsDeniedResult,
