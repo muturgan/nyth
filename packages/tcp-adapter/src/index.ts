@@ -1,4 +1,4 @@
-import net = require('net');
+import { Server as TcpServer, createServer as createTcpServer } from 'net';
 import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
 import { IRpcAdapter, IRpcExecutor, IRpcAdapterConstructor } from '@nyth/common';
@@ -13,7 +13,7 @@ export interface ITcpAdapterOptions {
 
 export const TcpAdapter: IRpcAdapterConstructor<ITcpAdapterOptions> = class TcpAdapter extends BaseAdapter implements IRpcAdapter // tslint:disable-line:no-shadowed-variable
 {
-   readonly #server: net.Server;
+   readonly #server:  TcpServer;
    readonly #host: string;
    readonly #port: number;
    #executor: IRpcExecutor | null = null;
@@ -31,7 +31,7 @@ export const TcpAdapter: IRpcAdapterConstructor<ITcpAdapterOptions> = class TcpA
 
       this.#host = options?.listenAllPorts === true ? '0.0.0.0' : '127.0.0.1';
 
-      this.#server = net.createServer((socket): void =>
+      this.#server = createTcpServer((socket): void =>
       {
          socket.on('data', async (buf) => {
             if (this.#executor === null) {

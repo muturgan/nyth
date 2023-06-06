@@ -1,4 +1,4 @@
-import http = require('http');
+import { Server as HttpServer, createServer as createHttpServer } from 'http';
 import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
 import { IRpcAdapter, IRpcExecutor, IHttpAdapter } from '@nyth/common';
@@ -22,7 +22,7 @@ export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHtt
 
 export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends BaseAdapter implements IRpcAdapter, IHttpAdapter // tslint:disable-line:no-shadowed-variable
 {
-   readonly #server: http.Server;
+   readonly #server: HttpServer;
    readonly #host: string;
    readonly #port: number;
    #executor: IRpcExecutor | null = null;
@@ -40,7 +40,7 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
 
       this.#host = options?.listenAllPorts === true ? '0.0.0.0' : '127.0.0.1';
 
-      this.#server = http.createServer(async (req, res): Promise<void> =>
+      this.#server = createHttpServer(async (req, res): Promise<void> =>
       {
          if (this.#executor === null) {
             res.socket?.destroy();
@@ -165,7 +165,7 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
       });
    }
 
-   public adjust<T>(constructor: new (arg: { server: http.Server }) => T): T {
+   public adjust<T>(constructor: new (arg: { server: HttpServer }) => T): T {
       return new constructor({server: this.#server});
    }
 

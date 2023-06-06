@@ -1,6 +1,6 @@
 {
   "name": "@nyth/ws-adapter",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
@@ -9,7 +9,7 @@
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
-      "import": "./es6.mjs"
+      "import": "./dist/es6/index.mjs"
     }
   },
   "engines": {
@@ -17,29 +17,32 @@
     "npm": ">=8.5.0"
   },
   "scripts": {
-    "build": "(rm -rf dist || npx rimraf dist) && tsc -p tsconfig.json && mv dist/index.js dist/index.cjs"
+    "build": "npm run build_cjs && npm run build_es6",
+    "build_cjs": "tsc -p tsconfig.json && mv dist/index.js dist/index.cjs",
+    "build_es6": "tsc -p tsconfig.es6.json && mv dist/es6/index.js dist/es6/index.mjs",
+    "prebuild": "rm -rf dist || npx rimraf dist"
   },
   "files": [
-    "dist",
-    "es6.mjs"
+    "dist"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/muturgan/nyth.git"
+    "url": "git+https://github.com/muturgan/nyth.git",
+    "directory": "packages/ws-adapter"
   },
   "bugs": {
     "url": "https://github.com/muturgan/nyth/issues"
   },
   "homepage": "https://github.com/muturgan/nyth#readme",
   "dependencies": {
-    "@nyth/base-adapter": "^0.4.0",
-    "@nyth/models": "^0.4.0",
-    "@nyth/serializer": "^0.4.0",
+    "@nyth/base-adapter": "^0.5.0",
+    "@nyth/models": "^0.5.0",
+    "@nyth/serializer": "^0.5.0",
     "ws": "^8.13.0"
   },
   "peerDependencies": {
-    "@nyth/common": "^0.4.0",
-    "@nyth/http-adapter": "^0.4.0"
+    "@nyth/common": "^0.5.0",
+    "@nyth/http-adapter": "^0.5.0"
   },
   "peerDependenciesMeta": {
     "@nyth/http-adapter": {
