@@ -1,5 +1,6 @@
 import http = require('http');
-import { BaseAdapter, ISerializer, IRpcAdapter, IRpcExecutor, IRpcRequest, IHttpAdapter, SystemErrorResult } from '@nyth/common';
+import { ISerializer } from '@nyth/serializer';
+import { BaseAdapter, IRpcAdapter, IRpcExecutor, IRpcRequest, IHttpAdapter, SystemErrorResult } from '@nyth/common';
 
 
 const GET = 'GET';
@@ -82,7 +83,7 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
 
                const body = Buffer.concat(chunks).toString();
                try {
-                  rpcReq = this.serializer.deserialize(body);
+                  rpcReq = this.serializer.deserialize<IRpcRequest>(body);
                } catch (err) {
                   const errMessage1 = `Error on RPC request deserialization: ${(err as Error)?.message}`;
                   // @ts-ignore

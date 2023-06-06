@@ -1,6 +1,6 @@
+import { ISerializer } from '@nyth/serializer';
 import { BaseAdapter } from './base-adapter';
 import { RpcResult } from './responses';
-import { ISerializer } from './serializer';
 
 export interface IRpcRequest<Payload = unknown> {
    readonly method: string;

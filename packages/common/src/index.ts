@@ -27,8 +27,6 @@ export {
    SystemErrorResult,
 } from './responses';
 
-export { ISerializer, defaultSerializer } from './serializer';
-
 export {
    IRpcRequest,
    IRpcExecutor,

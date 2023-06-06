@@ -1,5 +1,6 @@
 import { WebSocketServer } from 'ws';
-import { BaseAdapter, ISerializer, IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest, IHttpAdapter, SystemErrorResult } from '@nyth/common';
+import { ISerializer } from '@nyth/serializer';
+import { BaseAdapter, IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest, IHttpAdapter, SystemErrorResult } from '@nyth/common';
 
 
 export type IWebSocketAdapterOptions = {
@@ -47,7 +48,7 @@ export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> 
          ws.on('message', async (rawData): Promise<void> => {
             let rpcReq: IRpcRequest | null = null;
             try {
-               rpcReq = this.serializer.deserialize(rawData.toString());
+               rpcReq = this.serializer.deserialize<IRpcRequest>(rawData.toString());
             } catch (err) {
                const errMessage1 = `Error on RPC request deserialization: ${(err as Error)?.message}`;
                const r1 = new SystemErrorResult(rpcReq as IRpcRequest, errMessage1);

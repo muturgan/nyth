@@ -1,5 +1,6 @@
 import net = require('net');
-import { BaseAdapter, ISerializer, IRpcAdapter, IRpcExecutor, IRpcRequest, IRpcAdapterConstructor, SystemErrorResult } from '@nyth/common';
+import { ISerializer } from '@nyth/serializer';
+import { BaseAdapter, IRpcAdapter, IRpcExecutor, IRpcRequest, IRpcAdapterConstructor, SystemErrorResult } from '@nyth/common';
 
 
 export interface ITcpAdapterOptions {
@@ -40,7 +41,7 @@ export const TcpAdapter: IRpcAdapterConstructor<ITcpAdapterOptions> = class TcpA
 
             try {
                const body = buf.toString();
-               rpcReq = this.serializer.deserialize(body);
+               rpcReq = this.serializer.deserialize<IRpcRequest>(body);
             }
             catch (err) {
                const errMessage1 = `Error on RPC request deserialization: ${(err as Error)?.message}`;

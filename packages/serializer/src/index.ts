@@ -1,9 +1,6 @@
-import { RpcResult } from './responses';
-import { IRpcRequest } from './typings';
-
 export interface ISerializer {
-   deserialize(req: string): IRpcRequest;
-   serialize(res: RpcResult): string;
+   deserialize<T>(req: string): T;
+   serialize(res: unknown): string;
 }
 
 export const defaultSerializer: ISerializer = {

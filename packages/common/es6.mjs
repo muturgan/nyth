@@ -14,6 +14,5 @@ export {
     ScenarioSuccessResult,
     PermissionsDeniedResult,
     ScenarioFailResult,
-    SystemErrorResult,
-    defaultSerializer
+    SystemErrorResult
 } from './dist/index.cjs';

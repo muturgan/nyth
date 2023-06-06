@@ -1,4 +1,4 @@
-import { ISerializer, defaultSerializer } from './serializer';
+import { ISerializer, defaultSerializer } from '@nyth/serializer';
 
 export abstract class BaseAdapter
 {

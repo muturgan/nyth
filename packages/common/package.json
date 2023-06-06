@@ -31,6 +31,9 @@
     "url": "https://github.com/muturgan/nyth/issues"
   },
   "homepage": "https://github.com/muturgan/nyth#readme",
+  "dependencies": {
+    "@nyth/serializer": "^0.4.0"
+  },
   "devDependencies": {
     "@types/node": "^20.2.5",
     "typescript": "^5.1.3"
