@@ -1,4 +1,19 @@
-import { IRpcRequestOptions, IRpcRequest } from './typings';
+export interface IRpcRequest<Payload = unknown> {
+   readonly method: string;
+   readonly payload: Payload;
+   readonly correlationId?: string | number | null;
+   readonly requestId?: string | number | null;
+   readonly version?: number | null;
+   readonly timestamp?: number | null;
+}
+
+export interface IRpcRequestOptions {
+   withCorrelationId?: boolean;
+   withRequestId?: boolean;
+   withTimestamp?: boolean;
+   correlationId?: string | number | null;
+   requestId?: string | number | null;
+}
 
 export class RpcRequest<Payload = unknown> implements IRpcRequest<Payload> {
    public readonly correlationId?: string | number | null | undefined;
@@ -8,7 +23,7 @@ export class RpcRequest<Payload = unknown> implements IRpcRequest<Payload> {
    constructor(
       public readonly method: string,
       public readonly payload: Payload,
-      options?: IRpcRequestOptions,
+      options?: Readonly<IRpcRequestOptions>,
    ) {
       if (options?.correlationId) {
          this.correlationId = options.correlationId;

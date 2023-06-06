@@ -1,7 +1,8 @@
 import { WebSocketServer } from 'ws';
 import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
-import { IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest, IHttpAdapter, SystemErrorResult } from '@nyth/common';
+import { IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IHttpAdapter } from '@nyth/common';
+import { IRpcRequest, SystemErrorResult } from '@nyth/models';
 
 
 export type IWebSocketAdapterOptions = {

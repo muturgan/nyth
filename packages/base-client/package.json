@@ -32,10 +32,8 @@
   },
   "homepage": "https://github.com/muturgan/nyth#readme",
   "dependencies": {
+    "@nyth/models": "^0.4.0",
     "@nyth/serializer": "^0.4.0"
-  },
-  "peerDependencies": {
-    "@nyth/common": "^0.4.0"
   },
   "devDependencies": {
     "typescript": "^5.1.3"

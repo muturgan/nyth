@@ -1,7 +1,8 @@
 import http = require('http');
 import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
-import { IRpcAdapter, IRpcExecutor, IRpcRequest, IHttpAdapter, SystemErrorResult } from '@nyth/common';
+import { IRpcAdapter, IRpcExecutor, IHttpAdapter } from '@nyth/common';
+import { IRpcRequest, SystemErrorResult } from '@nyth/models';
 
 
 const GET = 'GET';

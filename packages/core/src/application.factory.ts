@@ -1,4 +1,5 @@
-import { IApplication, IApplicationFactory, IRpcExecutor, PermissionsDeniedError, PermissionsDeniedResult, ScenarioError, ScenarioFailResult, ScenarioSuccessResult, SystemError, SystemErrorResult, THandlerValidationResult } from '@nyth/common';
+import { IApplication, IApplicationFactory, IRpcExecutor } from '@nyth/common';
+import { PermissionsDeniedError, PermissionsDeniedResult, ScenarioError, ScenarioFailResult, ScenarioSuccessResult, SystemError, SystemErrorResult, THandlerValidationResult } from '@nyth/models';
 import { parseFvValidatorErrors } from './fv-error-extractor';
 import { validateRequest } from './request.validator';
 

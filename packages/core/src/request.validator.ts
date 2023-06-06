@@ -1,5 +1,5 @@
 import Validator, { ValidationSchema, SyncCheckFunction } from 'fastest-validator';
-import { IRpcRequest } from '@nyth/common';
+import { IRpcRequest } from '@nyth/models';
 
 const V = new Validator();
 

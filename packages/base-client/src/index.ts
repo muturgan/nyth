@@ -1,4 +1,4 @@
-import { RpcRequest, IRpcRequestOptions, IRpcResult } from '@nyth/common';
+import { RpcRequest, IRpcRequestOptions, IRpcResult } from '@nyth/models';
 import { defaultSerializer, ISerializer } from '@nyth/serializer';
 
 

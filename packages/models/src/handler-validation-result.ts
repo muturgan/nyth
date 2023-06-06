@@ -1,4 +1,13 @@
-import { IHandlerValidationFail, IHandlerValidationSuccess } from './typings';
+export interface IHandlerValidationSuccess {
+   readonly isValidCallData: true;
+   readonly validationErrorMessage?: null;
+}
+
+export interface IHandlerValidationFail {
+   readonly isValidCallData: false;
+   readonly validationErrorMessage: string;
+}
+export type THandlerValidationResult = IHandlerValidationSuccess | IHandlerValidationFail;
 
 export class HandlerValidationSuccess implements IHandlerValidationSuccess {
    public readonly isValidCallData = true;

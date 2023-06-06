@@ -1,6 +1,6 @@
-import { IRpcRequest } from './typings';
+import { IRpcRequest } from './request';
 
-import { INTERNAL_ERROR_MESSAGE, PERMISSIONS_DENIED_MESSAGE, ScenarioError, SystemError, PermissionsDeniedError } from './errors';
+import { INTERNAL_ERROR_MESSAGE, PERMISSIONS_DENIED_MESSAGE, ScenarioError, SystemError, PermissionsDeniedError } from './error';
 
 declare const SECRET_SYMBOL: unique symbol;
 
