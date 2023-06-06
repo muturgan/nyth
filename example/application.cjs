@@ -1,10 +1,16 @@
+const assert = require('node:assert');
 const { Factory } = require('@nyth/core');
+const { EScenarioStatus } = require('@nyth/common');
 const { HttpAdapter } = require('@nyth/http-adapter');
 const { WebSocketAdapter } = require('@nyth/ws-adapter');
 
 const lengthHandler = {
    validate(rpcCallPayload) {
-      return typeof rpcCallPayload === 'string';
+      const isValidCallData = typeof rpcCallPayload === 'string';
+      return {
+         isValidCallData,
+         validationErrorMessage: isValidCallData ? null : 'request payload should be a string',
+      };
    },
    run(rpcCall) {
       return rpcCall.payload.length;
@@ -36,9 +42,9 @@ const app = Factory(routing, wsAdapter);
       },
       ).then((stream) => stream.json());
 
-   console.log({
-      length: res.payload,
-   });
+   console.log(res);
+   assert.strictEqual(res.status, EScenarioStatus.SCENARIO_SUCCESS);
+   assert.strictEqual(res.payload, lengthHandler.run(req));
 
    await app.stop();
 })();
