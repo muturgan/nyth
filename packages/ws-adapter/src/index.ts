@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws';
-import { BaseAdapter, ISerializer, IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest, IHttpAdapter } from '@nyth/common';
+import { BaseAdapter, ISerializer, IRpcAdapter, IRpcAdapterConstructor, IRpcExecutor, IRpcRequest, IHttpAdapter, SystemErrorResult } from '@nyth/common';
 
 
 export type IWebSocketAdapterOptions = {
@@ -45,11 +45,21 @@ export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> 
 
       this.#server.on('connection', (ws) => {
          ws.on('message', async (rawData): Promise<void> => {
-            let rpcReq: IRpcRequest;
+            let rpcReq: IRpcRequest | null = null;
             try {
                rpcReq = this.serializer.deserialize(rawData.toString());
-            } catch {
-               ws.send('Error...');
+            } catch (err) {
+               const errMessage1 = `Error on RPC request deserialization: ${(err as Error)?.message}`;
+               const r1 = new SystemErrorResult(rpcReq as IRpcRequest, errMessage1);
+
+               let serializedR1: string;
+               try {
+                  serializedR1 = this.serializer.serialize(r1);
+                  ws.send(serializedR1);
+               } catch {
+                  ws.send(errMessage1);
+               }
+
                return;
             }
 
@@ -57,10 +67,21 @@ export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> 
             let serializedResult: string;
             try {
                serializedResult = this.serializer.serialize(result);
-            } catch {
-               ws.send('Error on response serialisation...');
+            } catch (err) {
+               const errMessage2 = `Error on RPC result serialization: ${(err as Error)?.message}`;
+               const r2 = new SystemErrorResult(rpcReq, errMessage2);
+
+               let serializedR2: string;
+               try {
+                  serializedR2 = this.serializer.serialize(r2);
+                  ws.send(serializedR2);
+               } catch {
+                  ws.send(errMessage2);
+               }
+
                return;
             }
+
             ws.send(serializedResult);
          });
       });

@@ -1,5 +1,5 @@
 import http = require('http');
-import { BaseAdapter, ISerializer, IRpcAdapter, IRpcExecutor, IRpcRequest, IHttpAdapter } from '@nyth/common';
+import { BaseAdapter, ISerializer, IRpcAdapter, IRpcExecutor, IRpcRequest, IHttpAdapter, SystemErrorResult } from '@nyth/common';
 
 
 const GET = 'GET';
@@ -10,7 +10,7 @@ const API = '/api';
 
 export interface IHttpAdapterOptions {
    readonly port: number;
-   readonly listenAllPorts?: boolean
+   readonly listenAllPorts?: boolean;
 }
 
 export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHttpAdapter;
@@ -83,10 +83,21 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
                const body = Buffer.concat(chunks).toString();
                try {
                   rpcReq = this.serializer.deserialize(body);
-               } catch {
-                  res.writeHead(400);
-                  res.end('Incorrect request body. It should be a valid json-serialized object');
-                  return;
+               } catch (err) {
+                  const errMessage1 = `Error on RPC request deserialization: ${(err as Error)?.message}`;
+                  // @ts-ignore
+                  const r1 = new SystemErrorResult(rpcReq, errMessage1);
+
+                  let serializedR1: string;
+                  try {
+                     serializedR1 = this.serializer.serialize(r1);
+                     res.end(serializedR1);
+                     return;
+                  } catch {
+                     res.writeHead(500);
+                     res.end(errMessage1);
+                     return;
+                  }
                }
                break;
 
@@ -100,10 +111,20 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
          let serializedResult: string;
          try {
             serializedResult = this.serializer.serialize(result);
-         } catch {
-            res.writeHead(500);
-            res.end('Error on response serialisation');
-            return;
+         } catch (err) {
+            const errMessage2 = `Error on RPC result serialization: ${(err as Error)?.message}`;
+            const r2 = new SystemErrorResult(rpcReq, errMessage2);
+
+            let serializedR2: string;
+            try {
+               serializedR2 = this.serializer.serialize(r2);
+               res.end(serializedR2);
+               return;
+            } catch {
+               res.writeHead(500);
+               res.end(errMessage2);
+               return;
+            }
          }
 
          res.end(serializedResult);
