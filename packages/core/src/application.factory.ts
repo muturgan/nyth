@@ -1,41 +1,67 @@
-import { IApplication, IApplicationFactory, IRpcExecutor, ScenarioFailResult, ScenarioSuccessResult, SystemError, SystemErrorResult } from '@nyth/common';
+import { IApplication, IApplicationFactory, IRpcExecutor, PermissionsDeniedError, PermissionsDeniedResult, ScenarioError, ScenarioFailResult, ScenarioSuccessResult, SystemError, SystemErrorResult, THandlerValidationResult } from '@nyth/common';
 import { parseFvValidatorErrors } from './fv-error-extractor';
 import { validateRequest } from './request.validator';
-import { ValidationError } from 'fastest-validator';
-
-const predicateRpcCall = (rpcCall: unknown, validationResult: boolean | ValidationError[]): validationResult is boolean => {
-   return Boolean(rpcCall) && validationResult === true;
-};
 
 export const Factory: IApplicationFactory = (routing, adapter) =>
 {
-   const executor: IRpcExecutor = async (rpcCall) => {
+   if (routing === null || typeof routing !== 'object') {
+      throw new Error('a routing argument should be a dictionary of handlers');
+   }
+
+   Object.values(routing).forEach((handler) => {
+      if (typeof handler.validate !== 'function' || typeof handler.run !== 'function') {
+         throw new Error('a routing argument should be a dictionary of handlers');
+      }
+   });
+
+   if (typeof adapter?.start !== 'function' || typeof adapter.close !== 'function') {
+      throw new Error('an adapter argument should implements IRpcAdapter');
+   }
+
+   const executor: IRpcExecutor = async (rpcCall) =>
+   {
+      const validationResult = validateRequest(rpcCall);
+      if (validationResult !== true) {
+         const validationErrorMessage = parseFvValidatorErrors(validationResult);
+         return new ScenarioFailResult(rpcCall, validationErrorMessage);
+      }
+
+      const handler = routing[rpcCall.method];
+      if (handler === undefined) {
+         return new ScenarioFailResult(rpcCall, 'There is no handler for this RPC method');
+      }
+
+      let handlerValidationResult: THandlerValidationResult | null = null;
       try {
-         const validationResult = validateRequest(rpcCall);
-         if (!predicateRpcCall(rpcCall, validationResult)) {
-            const validationErrorMessage = parseFvValidatorErrors(validationResult);
-            return new ScenarioFailResult(rpcCall, validationErrorMessage);
+         handlerValidationResult = await handler.validate(rpcCall.payload);
+         if (handlerValidationResult?.isValidCallData !== true) {
+            return new ScenarioFailResult(rpcCall, handlerValidationResult?.validationErrorMessage || 'Unknown RPC handler validation error');
          }
-
-         const handler = routing[rpcCall.method];
-         if (handler === undefined) {
-            return new ScenarioFailResult(rpcCall, 'There is no handler for this RPC method');
-         }
-
-         const handlerValidationResult = handler.validate(rpcCall.payload);
-         if (handlerValidationResult.isValidCallData !== true) {
-            return new ScenarioFailResult(rpcCall, handlerValidationResult.validationErrorMessage);
-         }
-
-         const result = await handler.run(rpcCall);
-
-         const data = new ScenarioSuccessResult(rpcCall, result);
-
-         return data;
+      } catch (err) {
+         return new SystemErrorResult(rpcCall, `Error on handler validation: ${(err as Error)?.message}`);
       }
-      catch (err) {
-         return SystemErrorResult.fromError(rpcCall, new SystemError(err));
+
+      let result: unknown = null;
+      try {
+         result = await handler.run(rpcCall);
+      } catch (err) {
+         if (err instanceof ScenarioError) {
+            return ScenarioFailResult.fromError(rpcCall, err);
+         }
+         else if (err instanceof PermissionsDeniedError) {
+            return PermissionsDeniedResult.fromError(rpcCall, err);
+         }
+         else if (err instanceof SystemError) {
+            return SystemErrorResult.fromError(rpcCall, err);
+         }
+         else {
+            return SystemErrorResult.fromError(rpcCall, new SystemError(err));
+         }
       }
+
+      const data = new ScenarioSuccessResult(rpcCall, result);
+
+      return data;
    };
 
    const app: IApplication = {

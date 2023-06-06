@@ -31,8 +31,8 @@ export interface IHandlerValidationFail {
 export type THandlerValidationResult = IHandlerValidationSuccess | IHandlerValidationFail;
 
 export interface IRpcMethodHandler<Result = unknown, CallData = unknown> {
-   validate(rpcCallPayload: CallData): THandlerValidationResult;
-   run(rpcCall: IRpcRequest<CallData>): Result | Promise<Result>;
+   validate(rpcCallPayload: CallData): THandlerValidationResult | Promise<THandlerValidationResult>;
+   run(rpcCall: IRpcRequest<CallData>): Result | Promise<Result> | never;
 }
 
 export type IExecutor<Result = unknown, CallData = unknown> = (handler: IRpcMethodHandler<Result, CallData>) => Promise<Result>;
@@ -44,4 +44,4 @@ export interface IApplication {
 
 export type IRouting = Record<string, IRpcMethodHandler>;
 
-export type IApplicationFactory = (handlers: IRouting, adapter: IRpcAdapter) => IApplication;
+export type IApplicationFactory = (handlers: IRouting, adapter: IRpcAdapter) => IApplication | never;

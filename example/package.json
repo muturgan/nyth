@@ -1,8 +1,8 @@
 {
   "peerDependencies": {
-    "@nyth/core": "^0.3.2",
-    "@nyth/http-adapter": "^0.3.2",
-    "@nyth/ws-adapter": "^0.3.2"
+    "@nyth/core": "^0.3.3",
+    "@nyth/http-adapter": "^0.3.3",
+    "@nyth/ws-adapter": "^0.3.3"
   },
   "devDependencies": {
     "@types/node": "^20.2.5"

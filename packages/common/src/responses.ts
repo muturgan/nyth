@@ -11,7 +11,7 @@ export enum EScenarioStatus {
    SYSTEM_ERROR,
 }
 
-export interface IRpcResult<Payload = unknown> {
+export interface IRpcResult<Payload> {
    readonly status: EScenarioStatus;
    readonly payload?: Payload | null;
    readonly correlationId?: string | number | null;
@@ -46,10 +46,10 @@ export abstract class RpcResult<Payload = unknown> implements IRpcResult<Payload
    }
 }
 
-export class ScenarioSuccessResult<Payload = unknown> extends RpcResult<Payload> {
+export class ScenarioSuccessResult<Payload> extends RpcResult<Payload> {
    public override readonly status!: EScenarioStatus.SCENARIO_SUCCESS;
 
-   constructor(request: IRpcRequest, payload?: Payload | null) {
+   constructor(request: IRpcRequest, payload?: Payload) {
       super(EScenarioStatus.SCENARIO_SUCCESS, payload, request);
    }
 }
