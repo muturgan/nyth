@@ -16,6 +16,14 @@ export {
 export { IHttpAdapter } from './http-adapter';
 
 export {
+   RpcRequest,
+   RpcRequestWithTimestamp,
+   RpcRequestWithRequestId,
+   RpcRequestWithCorrelationId,
+   FullRpcRequest,
+} from './request';
+
+export {
    EScenarioStatus,
    IRpcResult,
    RpcResult,
@@ -27,6 +35,7 @@ export {
 
 export {
    IRpcRequest,
+   IRpcRequestOptions,
    IRpcExecutor,
    IRpcAdapter,
    IRpcAdapterConstructor,

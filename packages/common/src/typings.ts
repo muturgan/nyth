@@ -35,6 +35,14 @@ export interface IRpcMethodHandler<Result = unknown, CallData = unknown> {
    run(rpcCall: IRpcRequest<CallData>): Result | Promise<Result> | never;
 }
 
+export interface IRpcRequestOptions {
+   withCorrelationId?: boolean;
+   withRequestId?: boolean;
+   withTimestamp?: boolean;
+   correlationId?: string | number | null;
+   requestId?: string | number | null;
+}
+
 export type IExecutor<Result = unknown, CallData = unknown> = (handler: IRpcMethodHandler<Result, CallData>) => Promise<Result>;
 
 export interface IApplication {

@@ -2,6 +2,7 @@ const assert = require('node:assert');
 const { Factory } = require('@nyth/core');
 const { EScenarioStatus } = require('@nyth/common');
 const { HttpAdapter } = require('@nyth/http-adapter');
+const { HttpClient } = require('@nyth/http-client');
 const { WebSocketAdapter } = require('@nyth/ws-adapter');
 
 const lengthHandler = {
@@ -34,7 +35,7 @@ const app = Factory(routing, wsAdapter);
       payload: "blabla"
    };
 
-   const res = await fetch(
+   const res1 = await fetch(
       'http://localhost:3333/api',
       {
          method: 'POST',
@@ -42,9 +43,17 @@ const app = Factory(routing, wsAdapter);
       },
       ).then((stream) => stream.json());
 
-   console.log(res);
-   assert.strictEqual(res.status, EScenarioStatus.SCENARIO_SUCCESS);
-   assert.strictEqual(res.payload, lengthHandler.run(req));
+   console.log(res1);
+   assert.strictEqual(res1.status, EScenarioStatus.SCENARIO_SUCCESS);
+   assert.strictEqual(res1.payload, lengthHandler.run(req));
+
+   const client = new HttpClient('http://localhost:3333');
+
+   const res2 = await client.rpcCall("getLength", "foobarbiz");
+
+   console.log(res2);
+   assert.strictEqual(res2.status, EScenarioStatus.SCENARIO_SUCCESS);
+   assert.strictEqual(res2.payload, "foobarbiz".length);
 
    await app.stop();
 })();
