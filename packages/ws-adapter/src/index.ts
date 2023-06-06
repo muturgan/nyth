@@ -4,6 +4,7 @@ import { BaseAdapter, ISerializer, IRpcAdapter, IRpcAdapterConstructor, IRpcExec
 
 export type IWebSocketAdapterOptions = {
    readonly port: number;
+   readonly listenAllPorts?: boolean
 } | {
    readonly httpAdapter: IHttpAdapter;
 };
@@ -17,6 +18,14 @@ export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> 
 
    constructor(options: IWebSocketAdapterOptions, serializer?: ISerializer) {
       super(serializer);
+
+      if ('port' in options) {
+         const port = options.port;
+         if (!port || typeof port !== 'number' || port < 1 || port > 9999 || port % 1 !== 0) {
+            throw new Error('[WebSocketAdapter] Incorrect port value');
+         }
+      }
+
       this.#options = options;
    }
 
@@ -29,7 +38,8 @@ export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> 
          console.info(`WebSocket server running at http://127.0.0.1:${this.#httpAdapter.port}`);
       }
       else {
-         this.#server = new WebSocketServer({ port: this.#options.port });
+         const host = this.#options?.listenAllPorts === true ? '0.0.0.0' : '127.0.0.1';
+         this.#server = new WebSocketServer({ host, port: this.#options.port });
          console.info(`WebSocket server running at http://127.0.0.1:${this.#options.port}`);
       }
 

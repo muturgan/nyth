@@ -10,6 +10,7 @@ const API = '/api';
 
 export interface IHttpAdapterOptions {
    readonly port: number;
+   readonly listenAllPorts?: boolean
 }
 
 export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHttpAdapter;
@@ -19,14 +20,22 @@ export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHtt
 export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends BaseAdapter implements IRpcAdapter, IHttpAdapter // tslint:disable-line:no-shadowed-variable
 {
    readonly #server: http.Server;
-   readonly #options: IHttpAdapterOptions;
+   readonly #host: string;
+   readonly #port: number;
    #executor: IRpcExecutor | null = null;
 
    constructor(options: IHttpAdapterOptions, serializer?: ISerializer)
    {
       super(serializer);
 
-      this.#options = options;
+      const port = options?.port;
+
+      if (!port || typeof port !== 'number' || port < 1 || port > 9999 || port % 1 !== 0) {
+         throw new Error('[HttpAdapter] Incorrect port value');
+      }
+      this.#port = port;
+
+      this.#host = options?.listenAllPorts === true ? '0.0.0.0' : '127.0.0.1';
 
       this.#server = http.createServer(async (req, res): Promise<void> =>
       {
@@ -110,8 +119,8 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
 
       return new Promise<void>((resolve, reject) => {
          try {
-            this.#server.listen(this.#options.port, () => {
-               console.info(`Server running at http://127.0.0.1:${this.#options.port}/`);
+            this.#server.listen(this.#port, this.#host, () => {
+               console.info(`Server running at http://127.0.0.1:${this.#port}/`);
                resolve();
             });
          } catch (err) {
@@ -137,6 +146,6 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
    }
 
    public get port(): number {
-      return this.#options.port;
+      return this.#port;
    }
 };
