@@ -1,0 +1,4 @@
+*.cjs linguist-detectable=false
+*.mjs linguist-detectable=false
+*.sh linguist-detectable=false
+.husky/* linguist-detectable=false
