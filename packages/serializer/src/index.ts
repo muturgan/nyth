@@ -82,3 +82,12 @@ export const defaultSerializer: ISerializer = {
       return JSON.stringify(flat);
    },
 };
+
+export const simpleJsonSerializer: ISerializer = {
+   deserialize(reqOrRes) {
+      return JSON.parse(reqOrRes);
+   },
+   serialize(reqOrRes) {
+      return JSON.stringify(reqOrRes);
+   },
+};

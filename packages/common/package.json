@@ -1,6 +1,6 @@
 {
   "name": "@nyth/common",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
@@ -35,9 +35,9 @@
   },
   "homepage": "https://github.com/muturgan/nyth#readme",
   "dependencies": {
-    "@nyth/base-adapter": "^0.5.3",
-    "@nyth/models": "^0.5.3",
-    "@nyth/serializer": "^0.5.3"
+    "@nyth/base-adapter": "^0.5.4",
+    "@nyth/models": "^0.5.4",
+    "@nyth/serializer": "^0.5.4"
   },
   "devDependencies": {
     "typescript": "^5.1.3"
