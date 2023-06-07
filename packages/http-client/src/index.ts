@@ -1,12 +1,13 @@
 import { BaseClient, IBaseClientOptions } from '@nyth/base-client';
+import { TIdGenerator } from '@nyth/models';
 import { ISerializer } from '@nyth/serializer';
 
 
 export class HttpClient extends BaseClient {
    readonly #url: string;
 
-   constructor(url: string, options?: IBaseClientOptions, serializer?: ISerializer) {
-      super(options, serializer);
+   constructor(url: string, options?: IBaseClientOptions | null, serializer?: ISerializer | null, idGenerator?: TIdGenerator | null) {
+      super(options, serializer, idGenerator);
 
       let u: URL;
       try {

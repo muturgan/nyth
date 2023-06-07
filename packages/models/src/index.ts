@@ -16,6 +16,8 @@ export {
    HandlerValidationFail,
 } from './handler-validation-result';
 
+export { TIdGenerator } from './id-generator';
+
 export {
    IRpcRequest,
    IRpcRequestOptions,
