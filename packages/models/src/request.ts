@@ -1,6 +1,4 @@
-const randomUUID: () => string = typeof window !== 'undefined' && typeof window.document !== 'undefined'
-   ? globalThis.crypto.randomUUID
-   : require('node:crypto').randomUUID;
+const crypto = globalThis.crypto || require('node:crypto');
 
 export interface IRpcRequest<Payload = unknown> {
    readonly method: string;
@@ -33,14 +31,14 @@ export class RpcRequest<Payload = unknown> implements IRpcRequest<Payload> {
          this.correlationId = options.correlationId;
       }
       else if (options?.withCorrelationId) {
-         this.correlationId = randomUUID();
+         this.correlationId = crypto.randomUUID();
       }
 
       if (options?.requestId) {
          this.requestId = options.requestId;
       }
       else if (options?.withRequestId) {
-         this.requestId = randomUUID();
+         this.requestId = crypto.randomUUID();
       }
 
       if (options?.withTimestamp) {
