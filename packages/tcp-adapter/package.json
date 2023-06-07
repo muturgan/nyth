@@ -1,6 +1,6 @@
 {
   "name": "@nyth/tcp-adapter",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
@@ -35,12 +35,12 @@
   },
   "homepage": "https://github.com/muturgan/nyth#readme",
   "dependencies": {
-    "@nyth/base-adapter": "^0.5.0",
-    "@nyth/models": "^0.5.0",
-    "@nyth/serializer": "^0.5.0"
+    "@nyth/base-adapter": "^0.5.1",
+    "@nyth/models": "^0.5.1",
+    "@nyth/serializer": "^0.5.1"
   },
   "peerDependencies": {
-    "@nyth/common": "^0.5.0"
+    "@nyth/common": "^0.5.1"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",

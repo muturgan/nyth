@@ -1,6 +1,6 @@
 {
   "name": "@nyth/base-client",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
@@ -35,8 +35,8 @@
   },
   "homepage": "https://github.com/muturgan/nyth#readme",
   "dependencies": {
-    "@nyth/models": "^0.5.0",
-    "@nyth/serializer": "^0.5.0"
+    "@nyth/models": "^0.5.1",
+    "@nyth/serializer": "^0.5.1"
   },
   "devDependencies": {
     "typescript": "^5.1.3"
