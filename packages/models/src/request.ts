@@ -5,7 +5,6 @@ export interface IRpcRequest<Payload = unknown> {
    readonly payload: Payload;
    readonly correlationId?: string | number | null;
    readonly requestId?: string | number | null;
-   readonly version?: number | null;
    readonly timestamp?: number | null;
 }
 

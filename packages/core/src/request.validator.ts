@@ -5,7 +5,6 @@ const V = new Validator();
 
 const schema: ValidationSchema<Omit<IRpcRequest, 'payload'>> = {
    method: { type: 'string', empty: false },
-   version: { type: 'number', positive: true, integer: true, optional: true, nullable: true },
    correlationId: [
       { type: 'string', optional: true, nullable: true },
       { type: 'number', optional: true, nullable: true },

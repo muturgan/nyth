@@ -71,6 +71,9 @@ export abstract class BaseClient {
       if (requestId) {
          reqOptions.requestId = requestId;
       }
+      else if (chainReq?.requestId) {
+         reqOptions.withRequestId = true;
+      }
       else if (clientOptions?.withRequestId) {
          reqOptions.withRequestId = clientOptions.withRequestId;
       }
@@ -88,7 +91,10 @@ export abstract class BaseClient {
          reqOptions.withCorrelationId = clientOptions.withCorrelationId;
       }
 
-      if (clientOptions?.withTimestamp) {
+      if (chainReq?.timestamp) {
+         reqOptions.withTimestamp = true;
+      }
+      else if (clientOptions?.withTimestamp) {
          reqOptions.withTimestamp = clientOptions.withTimestamp;
       }
 

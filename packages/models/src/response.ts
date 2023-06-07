@@ -16,7 +16,6 @@ export interface IRpcResult<Payload> {
    readonly payload?: Payload | null;
    readonly correlationId?: string | number | null;
    readonly requestId?: string | number | null;
-   readonly version?: number | null;
    readonly timestamp?: number | null;
 }
 
@@ -26,7 +25,6 @@ export abstract class RpcResult<Payload = unknown> implements IRpcResult<Payload
 
    public readonly correlationId?: string | number;
    public readonly requestId?: string | number;
-   public readonly version?: number;
    public readonly timestamp = Date.now();
 
    protected constructor(
@@ -40,14 +38,11 @@ export abstract class RpcResult<Payload = unknown> implements IRpcResult<Payload
       if (request?.requestId) {
          this.requestId = request.requestId;
       }
-      if (request?.version) {
-         this.version = request.version;
-      }
    }
 }
 
 export class ScenarioSuccessResult<Payload> extends RpcResult<Payload> {
-   declare readonly status: EScenarioStatus.SCENARIO_SUCCESS;
+   declare public readonly status: EScenarioStatus.SCENARIO_SUCCESS;
 
    constructor(request: IRpcRequest, payload?: Payload) {
       super(EScenarioStatus.SCENARIO_SUCCESS, payload, request);
@@ -60,7 +55,7 @@ export class PermissionsDeniedResult extends RpcResult<string>
       return new PermissionsDeniedResult(request, err.message);
    }
 
-   declare readonly status: EScenarioStatus.PERMISSIONS_DENIED;
+   declare public readonly status: EScenarioStatus.PERMISSIONS_DENIED;
 
    constructor(request: IRpcRequest, message?: string | null) {
       super(EScenarioStatus.PERMISSIONS_DENIED, message || PERMISSIONS_DENIED_MESSAGE, request);
@@ -73,7 +68,7 @@ export class ScenarioFailResult extends RpcResult<string>
       return new ScenarioFailResult(request, err.message);
    }
 
-   declare readonly status: EScenarioStatus.SCENARIO_FAIL;
+   declare public readonly status: EScenarioStatus.SCENARIO_FAIL;
 
    constructor(request: IRpcRequest, message: string) {
       super(EScenarioStatus.SCENARIO_FAIL, message, request);
@@ -86,7 +81,7 @@ export class SystemErrorResult extends RpcResult<string>
       return new SystemErrorResult(request, err.message);
    }
 
-   declare readonly status: EScenarioStatus.SYSTEM_ERROR;
+   declare public readonly status: EScenarioStatus.SYSTEM_ERROR;
 
    constructor(request: IRpcRequest, message: string) {
       super(EScenarioStatus.SYSTEM_ERROR, message || INTERNAL_ERROR_MESSAGE, request);
