@@ -1,4 +1,4 @@
-import { Server as TcpServer, createServer as createTcpServer } from 'net';
+import { Server as TcpServer, createServer as createTcpServer } from 'node:net';
 import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
 import { IRpcAdapter, IRpcExecutor, IRpcAdapterConstructor } from '@nyth/common';

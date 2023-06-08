@@ -46,7 +46,7 @@ export const Http2Adapter: IRpcAdapterConstructor<IHttp2AdapterOptions> = class 
          key: options?.secureContext?.key,
          cert: options?.secureContext?.cert,
       };
-      if (!serverOptions?.key?.length || !serverOptions?.cert?.length) {
+      if (!serverOptions.key?.length || !serverOptions.cert?.length) {
          throw new Error('[Http2Adapter] Incorrect security context');
       }
 

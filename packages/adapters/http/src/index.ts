@@ -50,8 +50,8 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
          if (!options.secureContext?.key?.length || !options.secureContext?.cert?.length) {
             throw new Error('[HttpAdapter] Incorrect security context');
          }
-         serverOptions.key = options.secureContext?.key;
-         serverOptions.cert = options.secureContext?.cert;
+         serverOptions.key = options.secureContext.key;
+         serverOptions.cert = options.secureContext.cert;
       }
 
       type TCreateServer = (options: ServerOptions, requestListener: (req: IncomingMessage, res: ServerResponse) => Promise<void>) => HttpServer | HttpsServer;

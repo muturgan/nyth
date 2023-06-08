@@ -1,4 +1,5 @@
-import { Server as TcpServer, createServer as createTcpServer } from 'net';
+import { Server as TcpServer, createServer as createTcpServer, Socket as TcpSocket } from 'node:net';
+import { Server as TlsServer, createServer as createTlsServer, TLSSocket, TlsOptions } from 'node:tls';
 import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
 import { IRpcAdapter, IRpcExecutor, IRpcAdapterConstructor } from '@nyth/common';
@@ -8,12 +9,16 @@ import { IRpcRequest, SystemErrorResult } from '@nyth/models';
 export interface ITcpAdapterOptions {
    readonly port: number;
    readonly listenAllPorts?: boolean;
+   readonly secureContext?: {
+      readonly key: string | Buffer,
+      readonly cert: string | Buffer,
+   };
 }
 
 
 export const TcpAdapter: IRpcAdapterConstructor<ITcpAdapterOptions> = class TcpAdapter extends BaseAdapter implements IRpcAdapter // tslint:disable-line:no-shadowed-variable
 {
-   readonly #server:  TcpServer;
+   readonly #server:  TcpServer | TlsServer;
    readonly #host: string;
    readonly #port: number;
    #executor: IRpcExecutor | null = null;
@@ -31,7 +36,19 @@ export const TcpAdapter: IRpcAdapterConstructor<ITcpAdapterOptions> = class TcpA
 
       this.#host = options?.listenAllPorts === true ? '0.0.0.0' : '127.0.0.1';
 
-      this.#server = createTcpServer((socket): void =>
+      const serverOptions: TlsOptions = {};
+      if (options?.secureContext) {
+         if (!options.secureContext?.key?.length || !options.secureContext?.cert?.length) {
+            throw new Error('[TcpAdapter] Incorrect security context');
+         }
+         serverOptions.key = options.secureContext.key;
+         serverOptions.cert = options.secureContext.cert;
+      }
+
+      type TCreateServer = (options: TlsOptions, connectionListener: (socket: TcpSocket | TLSSocket) => void) => TcpServer | TlsServer;
+      const createServer: TCreateServer = options?.secureContext ? createTlsServer : createTcpServer;
+
+      this.#server = createServer(serverOptions, (socket): void =>
       {
          socket.on('data', async (buf) => {
             if (this.#executor === null) {
