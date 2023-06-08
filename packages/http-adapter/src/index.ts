@@ -1,4 +1,5 @@
-import { Server as HttpServer, createServer as createHttpServer } from 'http';
+import { Server as HttpServer, createServer as createHttpServer, IncomingMessage, ServerResponse } from 'http';
+import { Server as HttpsServer, createServer as createHttpsServer, ServerOptions } from 'https';
 import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
 import { IRpcAdapter, IRpcExecutor, IHttpAdapter } from '@nyth/common';
@@ -14,6 +15,10 @@ const API = '/api';
 export interface IHttpAdapterOptions {
    readonly port: number;
    readonly listenAllPorts?: boolean;
+   readonly secureContext?: {
+      readonly key: string | Buffer,
+      readonly cert: string | Buffer,
+   };
 }
 
 export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHttpAdapter;
@@ -22,7 +27,7 @@ export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHtt
 
 export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends BaseAdapter implements IRpcAdapter, IHttpAdapter // tslint:disable-line:no-shadowed-variable
 {
-   readonly #server: HttpServer;
+   readonly #server: HttpServer | HttpsServer;
    readonly #host: string;
    readonly #port: number;
    #executor: IRpcExecutor | null = null;
@@ -40,7 +45,19 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
 
       this.#host = options?.listenAllPorts === true ? '0.0.0.0' : '127.0.0.1';
 
-      this.#server = createHttpServer(async (req, res): Promise<void> =>
+      const serverOptions: ServerOptions = {};
+      if (options?.secureContext) {
+         if (!options.secureContext?.key?.length || !options.secureContext?.cert?.length) {
+            throw new Error('[HttpAdapter] Incorrect port value');
+         }
+         serverOptions.key = options.secureContext?.key;
+         serverOptions.cert = options.secureContext?.cert;
+      }
+
+      type TCreateServer = (options: ServerOptions, requestListener: (req: IncomingMessage, res: ServerResponse) => Promise<void>) => HttpServer | HttpsServer;
+      const createServer: TCreateServer = options?.secureContext ? createHttpsServer : createHttpServer;
+
+      this.#server = createServer(serverOptions, async (req, res): Promise<void> =>
       {
          if (this.#executor === null) {
             res.socket?.destroy();
