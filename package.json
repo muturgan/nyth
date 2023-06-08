@@ -4,6 +4,7 @@
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
+  "private": true,
   "engines": {
     "node": ">=16.14.2",
     "npm": ">=8.5.0"
