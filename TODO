@@ -1,0 +1,7 @@
+- models refactoring
+- meta
+- permissions
+- subscriptions
+- sse
+- udp
+- http and ws clients bundling
