@@ -1,9 +1,8 @@
 const assert = require('node:assert');
-const crypto = require('node:crypto');
-const net = require('node:net');
 const { Factory } = require('@nyth/core');
-const { EScenarioStatus } = require('@nyth/common');
+const { EScenarioStatus } = require('@nyth/models');
 const { TcpAdapter } = require('@nyth/tcp-adapter');
+const { TcpClient } = require('@nyth/tcp-client');
 
 const lengthHandler = {
    validate(rpcCallPayload) {
@@ -29,29 +28,16 @@ const app = Factory(routing, tcpAdapter);
 (async () => {
    await app.start();
 
-   const client = new net.Socket();
-   const port = 3333;
-   const host = '127.0.0.1';
+   const client = new TcpClient(3333, '127.0.0.1');
 
-   const req = {
-      method: "getLength",
-      payload: "blabla",
-      correlationId: crypto.randomUUID(),
-      requestId: crypto.randomUUID(),
-   };
+   const payload = "blabla";
 
-   client.on('data', async (data) => {
-      const res = JSON.parse(data);
+   const res = await client.rpcCall("getLength", payload);
 
-      console.log('result');
-      console.log(res);
-      assert.strictEqual(res.status, EScenarioStatus.SCENARIO_SUCCESS);
-      assert.strictEqual(res.payload, lengthHandler.run(req));
+   console.log('result:');
+   console.log(res);
+   assert.strictEqual(res.status, EScenarioStatus.SCENARIO_SUCCESS);
+   assert.strictEqual(res.payload, payload.length);
 
-      await app.stop();
-   });
-
-   client.connect(port, host, () => {
-      client.write(JSON.stringify(req));
-   });
+   await app.stop();
 })();

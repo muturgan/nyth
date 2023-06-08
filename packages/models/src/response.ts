@@ -2,8 +2,6 @@ import { IRpcRequest } from './request';
 
 import { INTERNAL_ERROR_MESSAGE, PERMISSIONS_DENIED_MESSAGE, ScenarioError, SystemError, PermissionsDeniedError } from './error';
 
-declare const SECRET_SYMBOL: unique symbol;
-
 export enum EScenarioStatus {
    SCENARIO_SUCCESS = 1,
    PERMISSIONS_DENIED,
@@ -19,10 +17,8 @@ export interface IRpcResult<Payload> {
    readonly timestamp?: number | null;
 }
 
-export abstract class RpcResult<Payload = unknown> implements IRpcResult<Payload> {
-   // @ts-ignore
-   private readonly [SECRET_SYMBOL]: unknown;
-
+export abstract class RpcResult<Payload = unknown> implements IRpcResult<Payload>
+{
    public readonly correlationId?: string | number;
    public readonly requestId?: string | number;
    public readonly timestamp = Date.now();
