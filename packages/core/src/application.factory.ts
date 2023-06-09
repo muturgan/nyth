@@ -1,9 +1,10 @@
-import { IApplication, IApplicationFactory, IRpcExecutor } from '@nyth/common';
+import { IRpcExecutor } from '@nyth/common';
 import { PermissionsDeniedError, PermissionsDeniedResult, ScenarioError, ScenarioFailResult, ScenarioSuccessResult, SystemError, SystemErrorResult, THandlerValidationResult } from '@nyth/models';
 import { parseFvValidatorErrors } from './fv-error-extractor';
 import { validateRequest } from './request.validator';
+import { IApplication, TApplicationFactory } from './typings';
 
-export const Factory: IApplicationFactory = (routing, adapter) =>
+export const Factory: TApplicationFactory = (routing, adapter) =>
 {
    if (routing === null || typeof routing !== 'object') {
       throw new Error('a routing argument should be a dictionary of handlers');
