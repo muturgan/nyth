@@ -182,7 +182,7 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
       });
    }
 
-   public adjust<T>(constructor: new (arg: { server: HttpServer }) => T): T {
+   public adjust<T>(constructor: new (arg: { server: HttpServer | HttpsServer }) => T): T {
       return new constructor({server: this.#server});
    }
 
