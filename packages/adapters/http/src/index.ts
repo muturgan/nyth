@@ -1,5 +1,6 @@
 import { Server as HttpServer, createServer as createHttpServer, IncomingMessage, ServerResponse } from 'http';
-import { Server as HttpsServer, createServer as createHttpsServer, ServerOptions } from 'https';
+import { Server as HttpsServer, createServer as createHttpsServer } from 'https';
+import { Http2SecureServer, createSecureServer as createHttp2Server, SecureServerOptions, Http2ServerRequest, Http2ServerResponse } from 'http2';
 import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
 import { IRpcAdapter, IRpcExecutor, IHttpAdapter } from '@nyth/common';
@@ -14,10 +15,11 @@ const API = '/api';
 
 export interface IHttpAdapterOptions {
    readonly port: number;
+   readonly type: 'http' | 'https' | 'http2';
    readonly listenAllPorts?: boolean;
    readonly secureContext?: {
-      readonly key: string | Buffer,
-      readonly cert: string | Buffer,
+      readonly key: string | Buffer;
+      readonly cert: string | Buffer;
    };
 }
 
@@ -27,7 +29,7 @@ export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHtt
 
 export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends BaseAdapter implements IRpcAdapter, IHttpAdapter // tslint:disable-line:no-shadowed-variable
 {
-   readonly #server: HttpServer | HttpsServer;
+   readonly #server: HttpServer | HttpsServer | Http2SecureServer;
    readonly #host: string;
    readonly #port: number;
    #executor: IRpcExecutor | null = null;
@@ -45,17 +47,23 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
 
       this.#host = options?.listenAllPorts === true ? '0.0.0.0' : '127.0.0.1';
 
-      const serverOptions: ServerOptions = {};
-      if (options?.secureContext) {
-         if (!options.secureContext?.key?.length || !options.secureContext?.cert?.length) {
+      const serverOptions: SecureServerOptions = {
+         allowHTTP1: true,
+      };
+      if (options?.type === 'https' || options?.type === 'http2') {
+         if (!options?.secureContext?.key?.length || !options?.secureContext?.cert?.length) {
             throw new Error('[HttpAdapter] Incorrect security context');
          }
          serverOptions.key = options.secureContext.key;
          serverOptions.cert = options.secureContext.cert;
       }
 
-      type TCreateServer = (options: ServerOptions, requestListener: (req: IncomingMessage, res: ServerResponse) => Promise<void>) => HttpServer | HttpsServer;
-      const createServer: TCreateServer = options?.secureContext ? createHttpsServer : createHttpServer;
+      type TCreateServer = (options: SecureServerOptions, requestListener: (req: IncomingMessage | Http2ServerRequest, res: ServerResponse | Http2ServerResponse) => Promise<void>) => HttpServer | HttpsServer | Http2SecureServer;
+      const createServer: TCreateServer = options?.type === 'http2'
+         ? createHttp2Server
+         : options?.type === 'https'
+            ? createHttpsServer
+            : createHttpServer;
 
       this.#server = createServer(serverOptions, async (req, res): Promise<void> =>
       {
@@ -182,7 +190,7 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
       });
    }
 
-   public adjust<T>(constructor: new (arg: { server: HttpServer | HttpsServer }) => T): T {
+   public adjust<T>(constructor: new (arg: { server: HttpServer | HttpsServer | Http2SecureServer }) => T): T {
       return new constructor({server: this.#server});
    }
 

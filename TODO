@@ -1,5 +1,7 @@
 - sort build script
+- http2 package deprecation
 - models refactoring
+- starting (or executor passing) once
 - meta
 - permissions
 - subscriptions
