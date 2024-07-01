@@ -10,7 +10,7 @@
     "npm": ">=8.5.0"
   },
   "scripts": {
-    "build": "npm run build -w @nyth/base-adapter && npm run build -w @nyth/base-client && npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/http-client && npm run build -w @nyth/models && npm run build -w @nyth/serializer && npm run build -w @nyth/tcp-adapter && npm run build -w @nyth/tcp-client && npm run build -w @nyth/ws-adapter",
+    "build": "npm run build -w @nyth/models && npm run build -w @nyth/serializer && npm run build -w @nyth/base-adapter && npm run build -w @nyth/base-client && npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/http-client && npm run build -w @nyth/tcp-adapter && npm run build -w @nyth/tcp-client && npm run build -w @nyth/ws-adapter",
     "buildsh": "./tools/build.sh",
     "publish": "./tools/publish.sh",
     "audit": "npm audit | grep 'found' | grep -E 'moderate|high|critical' && exit 1 || exit 0",
