@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "./dist/es6",
-    "module": "ES2022",
-    "declaration": false
-  }
-}

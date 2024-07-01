@@ -5,11 +5,12 @@
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
   "main": "dist/index.cjs",
+  "module": "index.mjs",
   "typings": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
-      "import": "./dist/es6/index.mjs",
+      "import": "./index.mjs",
       "types": "./dist/index.d.ts"
     }
   },
@@ -18,13 +19,12 @@
     "npm": ">=8.5.0"
   },
   "scripts": {
-    "build": "npm run build_cjs && npm run build_es6",
-    "build_cjs": "tsc -p tsconfig.json && mv dist/index.js dist/index.cjs",
-    "build_es6": "tsc -p tsconfig.es6.json && mv dist/es6/index.js dist/es6/index.mjs",
+    "build": "tsc -p tsconfig.json && mv dist/index.js dist/index.cjs",
     "prebuild": "rm -rf dist || npx rimraf dist"
   },
   "files": [
-    "dist"
+    "dist",
+    "index.mjs"
   ],
   "repository": {
     "type": "git",

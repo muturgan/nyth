@@ -1,9 +1,8 @@
-const assert = require('node:assert');
-const { Factory } = require('@nyth/core');
-const { EScenarioStatus } = require('@nyth/models');
-const { HttpAdapter } = require('@nyth/http-adapter');
-const { HttpClient } = require('@nyth/http-client');
-const { WebSocketAdapter } = require('@nyth/ws-adapter');
+import assert from 'node:assert';
+import { Factory } from '@nyth/core';
+import { EScenarioStatus } from '@nyth/models';
+import { TcpAdapter } from '@nyth/tcp-adapter';
+import { TcpClient } from '@nyth/tcp-client';
 
 const lengthHandler = {
    validate(rpcCallPayload) {
@@ -18,25 +17,24 @@ const lengthHandler = {
    },
 };
 
-const httpAdapter = new HttpAdapter({port: 3333});
-const wsAdapter = new WebSocketAdapter({httpAdapter: httpAdapter});
+const tcpAdapter = new TcpAdapter({port: 3333});
 
 const routing = {
    getLength: lengthHandler,
 };
 
-const app = Factory(routing, wsAdapter);
+const app = Factory(routing, tcpAdapter);
 
 (async () => {
    await app.start();
 
-   const client = new HttpClient('http://localhost:3333');
+   const client = new TcpClient(3333, '127.0.0.1');
 
-   const payload = "foobarbiz";
+   const payload = "blabla";
 
    const res = await client.rpcCall("getLength", payload);
 
-   console.log('res:');
+   console.log('result:');
    console.log(res);
    assert.strictEqual(res.status, EScenarioStatus.SCENARIO_SUCCESS);
    assert.strictEqual(res.payload, payload.length);
