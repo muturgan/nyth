@@ -16,7 +16,7 @@
     "audit": "npm audit | grep 'found' | grep -E 'moderate|high|critical' && exit 1 || exit 0",
     "lint_on_commit": "tslint",
     "lint_staged": "lint-staged",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "workspaces": [
     "./packages/*",
@@ -24,9 +24,9 @@
     "./packages/clients/*"
   ],
   "devDependencies": {
-    "@types/node": "^20.2.5",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
+    "@types/node": "^20.14.9",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
     "tslint": "^6.1.3"
   }
 }
