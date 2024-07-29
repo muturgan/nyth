@@ -1,6 +1,6 @@
 {
   "name": "nyth",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
@@ -10,10 +10,10 @@
     "npm": ">=8.5.0"
   },
   "scripts": {
-    "build": "npm run build -w @nyth/models && npm run build -w @nyth/serializer && npm run build -w @nyth/base-adapter && npm run build -w @nyth/base-client && npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/http-client && npm run build -w @nyth/tcp-adapter && npm run build -w @nyth/tcp-client && npm run build -w @nyth/ws-adapter",
+    "build": "npm run build -w @nyth/models && npm run build -w @nyth/serializer && npm run build -w @nyth/base-adapter && npm run build -w @nyth/base-client && npm run build -w @nyth/common && npm run build -w @nyth/core && npm run build -w @nyth/http-adapter && npm run build -w @nyth/http-client && npm run build -w @nyth/tcp-adapter && npm run build -w @nyth/tcp-client && npm run build -w @nyth/udp-adapter && npm run build -w @nyth/udp-client && npm run build -w @nyth/ws-adapter && npm run build -w @nyth/ws-client",
     "buildsh": "./tools/build.sh",
     "publish": "./tools/publish.sh",
-    "audit": "npm audit | grep 'found' | grep -E 'moderate|high|critical' && exit 1 || exit 0",
+    "audit": "npm audit | grep 'severity vulnerability' | grep -E 'moderate|high|critical' && exit 1 || exit 0",
     "lint_on_commit": "tslint",
     "lint_staged": "lint-staged",
     "prepare": "husky"
@@ -24,9 +24,10 @@
     "./packages/clients/*"
   ],
   "devDependencies": {
-    "@types/node": "^20.14.9",
-    "husky": "^9.0.11",
+    "@types/node": "^20.14.13",
+    "husky": "^9.1.4",
     "lint-staged": "^15.2.7",
-    "tslint": "^6.1.3"
+    "tslint": "^6.1.3",
+    "typescript": "^5.5.4"
   }
 }

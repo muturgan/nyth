@@ -1,5 +1,5 @@
-import { Server as HttpServer } from 'http';
-import { Server as HttpsServer } from 'https';
+import { Server as HttpServer } from 'node:http';
+import { Server as HttpsServer } from 'node:https';
 import { IRpcAdapter } from './typings';
 
 export interface IHttpAdapter extends IRpcAdapter {

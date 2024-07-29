@@ -1,4 +1,4 @@
-import assert from 'node:assert';
+import assert, { strict } from 'node:assert';
 import { Factory } from '@nyth/core';
 import { EScenarioStatus } from '@nyth/models';
 import { HttpAdapter } from '@nyth/http-adapter';
@@ -30,11 +30,11 @@ const app = Factory(routing, wsAdapter);
 (async () => {
    await app.start();
 
-   const client = new HttpClient('http://localhost:3333');
+   const client = new HttpClient('http://localhost:3333').extend({getLength: ['', 0]});
 
    const payload = "foobarbiz";
 
-   const res = await client.rpcCall("getLength", payload);
+   const res = await client.getLength(payload);
 
    console.log('res:');
    console.log(res);

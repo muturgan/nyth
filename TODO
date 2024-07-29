@@ -5,7 +5,6 @@
 - permissions
 - subscriptions
 - sse
-- udp
 - resort files via transports
 - http and ws clients bundling
 - tslint plugin for #

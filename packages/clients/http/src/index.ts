@@ -26,4 +26,8 @@ export class HttpClient extends BaseClient {
       })
       .then((stream) => stream.text());
    }
+
+   public close(): Promise<void> {
+      return Promise.resolve();
+   }
 }

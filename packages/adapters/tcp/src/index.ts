@@ -8,7 +8,7 @@ import { IRpcRequest, SystemErrorResult } from '@nyth/models';
 
 export interface ITcpAdapterOptions {
    readonly port: number;
-   readonly listenAllPorts?: boolean;
+   readonly listenAllHosts?: boolean;
    readonly secureContext?: {
       readonly key: string | Buffer,
       readonly cert: string | Buffer,
@@ -34,7 +34,7 @@ export const TcpAdapter: IRpcAdapterConstructor<ITcpAdapterOptions> = class TcpA
       }
       this.#port = port;
 
-      this.#host = options?.listenAllPorts === true ? '0.0.0.0' : '127.0.0.1';
+      this.#host = options?.listenAllHosts === true ? '0.0.0.0' : '127.0.0.1';
 
       const serverOptions: TlsOptions = {};
       if (options?.secureContext) {

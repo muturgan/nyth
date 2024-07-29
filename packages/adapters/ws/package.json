@@ -1,6 +1,6 @@
 {
   "name": "@nyth/ws-adapter",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
   "license": "MIT",
@@ -36,14 +36,14 @@
   },
   "homepage": "https://github.com/muturgan/nyth#readme",
   "dependencies": {
-    "@nyth/base-adapter": "^0.5.6",
-    "@nyth/models": "^0.5.6",
-    "@nyth/serializer": "^0.5.6",
-    "ws": "^8.17.1"
+    "@nyth/base-adapter": "^0.5.7",
+    "@nyth/models": "^0.5.7",
+    "@nyth/serializer": "^0.5.7",
+    "ws": "^8.18.0"
   },
   "peerDependencies": {
-    "@nyth/common": "^0.5.6",
-    "@nyth/http-adapter": "^0.5.6"
+    "@nyth/common": "^0.5.7",
+    "@nyth/http-adapter": "^0.5.7"
   },
   "peerDependenciesMeta": {
     "@nyth/http-adapter": {
@@ -54,9 +54,7 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^20.14.9",
-    "@types/ws": "^8.5.10",
-    "typescript": "^5.5.2"
+    "@types/ws": "^8.5.12"
   },
   "publishConfig": {
     "access": "public"

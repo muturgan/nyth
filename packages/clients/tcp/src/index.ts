@@ -39,4 +39,8 @@ export class TcpClient extends BaseClient {
          });
       });
    }
+
+   public close(): Promise<void> {
+      return Promise.resolve();
+   }
 }

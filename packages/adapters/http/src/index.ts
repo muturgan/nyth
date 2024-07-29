@@ -1,6 +1,6 @@
-import { Server as HttpServer, createServer as createHttpServer, IncomingMessage, ServerResponse } from 'http';
-import { Server as HttpsServer, createServer as createHttpsServer } from 'https';
-import { Http2SecureServer, createSecureServer as createHttp2Server, SecureServerOptions, Http2ServerRequest, Http2ServerResponse } from 'http2';
+import { Server as HttpServer, createServer as createHttpServer, IncomingMessage, ServerResponse } from 'node:http';
+import { Server as HttpsServer, createServer as createHttpsServer } from 'node:https';
+import { Http2SecureServer, createSecureServer as createHttp2Server, SecureServerOptions, Http2ServerRequest, Http2ServerResponse } from 'node:http2';
 import { BaseAdapter } from '@nyth/base-adapter';
 import { ISerializer } from '@nyth/serializer';
 import { IRpcAdapter, IRpcExecutor, IHttpAdapter } from '@nyth/common';
@@ -12,18 +12,20 @@ const POST = 'POST';
 const QUERY_SEPARATOR = '?';
 const API = '/api';
 
-
-export interface IHttpAdapterOptions {
+export type THttpAdapterOptions = {
    readonly port: number;
-   readonly type: 'http' | 'https' | 'http2';
-   readonly listenAllPorts?: boolean;
-   readonly secureContext?: {
+   readonly listenAllHosts?: boolean;
+} & ({
+   readonly type: 'http';
+} | {
+   readonly type: 'https' | 'http2';
+   readonly secureContext: {
       readonly key: string | Buffer;
       readonly cert: string | Buffer;
    };
-}
+});
 
-export type IHttpAdapterConstructor = new (options: IHttpAdapterOptions) => IHttpAdapter;
+export type IHttpAdapterConstructor = new (options: THttpAdapterOptions) => IHttpAdapter;
 
 
 
@@ -34,7 +36,7 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
    readonly #port: number;
    #executor: IRpcExecutor | null = null;
 
-   constructor(options: IHttpAdapterOptions, serializer?: ISerializer)
+   constructor(options: THttpAdapterOptions, serializer?: ISerializer)
    {
       super(serializer);
 
@@ -45,7 +47,7 @@ export const HttpAdapter: IHttpAdapterConstructor = class HttpAdapter extends Ba
       }
       this.#port = port;
 
-      this.#host = options?.listenAllPorts === true ? '0.0.0.0' : '127.0.0.1';
+      this.#host = options?.listenAllHosts === true ? '0.0.0.0' : '127.0.0.1';
 
       const serverOptions: SecureServerOptions = {
          allowHTTP1: true,

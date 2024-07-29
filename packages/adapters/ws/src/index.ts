@@ -7,7 +7,7 @@ import { IRpcRequest, SystemErrorResult } from '@nyth/models';
 
 export type IWebSocketAdapterOptions = {
    readonly port: number;
-   readonly listenAllPorts?: boolean
+   readonly listenAllHosts?: boolean
 } | {
    readonly httpAdapter: IHttpAdapter;
 };
@@ -41,7 +41,7 @@ export const WebSocketAdapter: IRpcAdapterConstructor<IWebSocketAdapterOptions> 
          console.info(`WebSocket server running at http://127.0.0.1:${this.#httpAdapter.port}`);
       }
       else {
-         const host = this.#options?.listenAllPorts === true ? '0.0.0.0' : '127.0.0.1';
+         const host = this.#options?.listenAllHosts === true ? '0.0.0.0' : '127.0.0.1';
          this.#server = new WebSocketServer({ host, port: this.#options.port });
          console.info(`WebSocket server running at http://127.0.0.1:${this.#options.port}`);
       }

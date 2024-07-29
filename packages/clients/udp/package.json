@@ -1,5 +1,5 @@
 {
-  "name": "@nyth/tcp-adapter",
+  "name": "@nyth/udp-client",
   "version": "0.5.7",
   "description": "nyth",
   "author": "Andrey Sakharov <caxap_8787@mail.ru> (https://www.linkedin.com/in/andrey-sakharov/)",
@@ -29,7 +29,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/muturgan/nyth.git",
-    "directory": "packages/adapters/tcp"
+    "directory": "packages/clients/udp"
   },
   "bugs": {
     "url": "https://github.com/muturgan/nyth/issues"
@@ -37,11 +37,7 @@
   "homepage": "https://github.com/muturgan/nyth#readme",
   "dependencies": {
     "@nyth/base-adapter": "^0.5.7",
-    "@nyth/models": "^0.5.7",
     "@nyth/serializer": "^0.5.7"
-  },
-  "peerDependencies": {
-    "@nyth/common": "^0.5.7"
   },
   "publishConfig": {
     "access": "public"

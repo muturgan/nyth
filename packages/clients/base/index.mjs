@@ -1,1 +1,1 @@
-export { BaseClient } from './dist/index.cjs';
+export { BaseClient, AsyncClient } from './dist/index.cjs';
